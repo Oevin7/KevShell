@@ -1,7 +1,10 @@
 pub mod command_lex {
+    use crate::commands::Commands;
+    use crate::commands::Commands::{Concatenate, Exit, List, MakeDirectory, Print, Touch, Find, Grep};
+
     #[derive(Debug)]
     pub enum Tokens {
-        Command(String),
+        Command(Commands),
         FilePath(String),
         Wildcard(String),
         Quote(String),
@@ -135,11 +138,19 @@ pub mod command_lex {
                                 }
                                 command.push(chars)
                             }
-                            if command.contains('.') {
-                                tokens.push(Tokens::FilePath(command))
-                            } else {
-                                tokens.push(Tokens::Command(command))
+
+                            match command.as_str() {
+                                "exit" | "ex" => tokens.push(Tokens::Command(Exit)),
+                                "ls" => tokens.push(Tokens::Command(List)),
+                                "touch" | "tc" => tokens.push(Tokens::Command(Touch)),
+                                "mkdir" | "md" => tokens.push(Tokens::Command(MakeDirectory)),
+                                "pr" | "print" | "echo" => tokens.push(Tokens::Command(Print)),
+                                "ct" | "cat" | "concatenate" => tokens.push(Tokens::Command(Concatenate)),
+                                "fd" | "find" => tokens.push(Tokens::Command(Find)),
+                                "grp" | "grep" => tokens.push(Tokens::Command(Grep)),
+                                _ => tokens.push(Tokens::FilePath(command)),
                             }
+
                         }
                     },
                 }
