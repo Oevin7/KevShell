@@ -1,10 +1,11 @@
 pub mod command_lex {
-    use crate::commands::Commands;
-    use crate::commands::Commands::{Concatenate, Exit, List, MakeDirectory, Print, Touch, Find, Grep};
+    use crate::commands::Utils::{Concatenate, Exit, Find, Grep, List, MakeDirectory, Print, Touch};
+    use crate::commands::Utils;
 
-    #[derive(Debug)]
+    /// These are the tokens that the input is broken down into
+    #[derive(Debug, Clone)]
     pub enum Tokens {
-        Command(Commands),
+        Command(Utils),
         FilePath(String),
         Wildcard(String),
         Quote(String),
@@ -23,11 +24,14 @@ pub mod command_lex {
         Error(String),
     }
 
+    /// The struct that contains the user input that needs to be lexed.
+    /// It also contains the output which was broken down into tokens.
     pub struct CommandLexer<'a> {
         pub input : &'a str,
         pub output : Option<&'a str>,
     }
 
+    ///Contains the functions for the lexer. A lexer needs to be created with input.
     impl<'a> CommandLexer<'a> {
         pub fn new(input : &'a str) -> CommandLexer<'a> {
             CommandLexer {
@@ -40,6 +44,8 @@ pub mod command_lex {
             self.output = Some(self.input);
         }
 
+        /// lex_output turns the input into various different tokens that can then be used
+        /// to run utilities and functions with the shell.
         pub fn lex_output(self) -> Option<Vec<Tokens>> {
             let mut tokens = Vec::new();
             let command_output = self.output?;

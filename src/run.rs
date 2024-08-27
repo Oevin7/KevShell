@@ -2,6 +2,7 @@ use std::io;
 use std::io::Write;
 use crate::user_handling::*;
 
+/// This is the main loop that runs the shell. This is then run in main. Just to keep things clean.
 pub fn run() {
     loop {
         print!("KevShell$> ");
@@ -25,7 +26,8 @@ pub fn run() {
             }
         };
 
-        process_output(tokens)
+        let command = process_output(tokens);
+        execute_commands(command);
 
     }
 }

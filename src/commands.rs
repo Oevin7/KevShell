@@ -1,31 +1,31 @@
-#[derive(Debug)]
-pub enum Commands {
+#[derive(Debug, Clone, Copy)]
+pub enum Utils {
     Exit,
     List,
-    Touch, ///Touch in traditional shells
+    Touch,
     MakeDirectory,
-    Print, ///Echo in traditional shells
-    Concatenate, ///Cat in traditional shells
-    Find, ///Find in traditional shells
-    Grep, ///Grep in traditional shells
+    Print,
+    Concatenate,
+    Find,
+    Grep,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Command {
-    command : Commands,
-    flags : Vec<String>,
-    arguments : Vec<String>,
-    input_redirection: Option<String>,
-    output_redirection: Option<String>,
-    append_output: bool,
-    background: bool,
-    pipe_to: Option<Box<Command>>,
+    pub command : Option<Utils>,
+    pub flags : Vec<String>,
+    pub arguments : Vec<String>,
+    pub input_redirection: Option<String>,
+    pub output_redirection: Option<String>,
+    pub append_output: bool,
+    pub background: bool,
+    pub pipe_to: Option<Box<Command>>,
 }
 
 impl Command {
-    pub fn new(command: Commands) -> Command {
+    pub fn new() -> Command {
         Command {
-            command,
+            command : None,
             flags : vec![],
             arguments : vec![],
             input_redirection : None,
